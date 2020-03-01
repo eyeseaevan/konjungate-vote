@@ -1,0 +1,63 @@
+version: '3'
+services:
+
+  #PHP Service
+  vote-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php:fpm
+    container_name: vote-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./laravel:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+  vote-webserver:
+    image: nginx:1.17.8-alpine
+    container_name: vote-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./laravel:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+#Postgres Service
+  vote-db:
+    image: postgres:alpine
+    container_name: vote-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "5432"
+    env_file:
+      - ./database.env # configure postgres
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - dbdata:/var/lib/postgresql/data/
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local
