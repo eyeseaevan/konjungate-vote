@@ -1,6 +1,5 @@
-version: '3'
+version: '3.4'
 services:
-
   #PHP Service
   vote-app:
     build:
@@ -17,8 +16,22 @@ services:
     volumes:
       - ./laravel:/var/www
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - app-network
+    network_mode: host
+
+  #Konjungate REST API
+  vote-rpc-rest:
+    build:
+      context: .
+      dockerfile: ./rpc-rest/Dockerfile
+    container_name: vote-rpc-rest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3333:3333"
+    working_dir: /rpc-rest
+    volumes:
+      - /data/vote/rpc-rest:/rpc-rest
+    network_mode: host
 
   #Nginx Service
   vote-webserver:
@@ -32,8 +45,8 @@ services:
     volumes:
       - ./laravel:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
-    networks:
-      - app-network
+    network_mode: host
+
 
 #Postgres Service
   vote-db:
@@ -44,19 +57,19 @@ services:
     ports:
       - "5432"
     env_file:
-      - ./database.env # configure postgres
+      - ./.env # configure postgres
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     volumes:
       - dbdata:/var/lib/postgresql/data/
-    networks:
-      - app-network
+    network_mode: host
 
 #Docker Networks
-networks:
-  app-network:
-    driver: bridge
+#networks:
+#  app-network:
+#    driver: bridge
+
 #Volumes
 volumes:
   dbdata:

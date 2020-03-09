@@ -1,0 +1,14 @@
+{
+  "name": "rpc-rest",
+  "version": "0.0.1",
+  "description": "RESTful API to communicate with a bitcoind-derived coin daemon using a middleware that communicates with the daemon's JSON RPC API",
+  "main": "rpc-rest.js",
+  "author": "eyeseaevan",
+  "license": "MIT",
+  "dependencies": {
+    "bitcoin-rpc-async": "^1.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}

@@ -18,4 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/register/auth', 'RegisterController@showRegistrationForm');
+Route::resource('/auth', 'AuthController');
 Route::resource('/vote', 'VoteController');
+Route::resource('/proposal', 'ProposalController');
+Route::resource('/option', 'OptionController');

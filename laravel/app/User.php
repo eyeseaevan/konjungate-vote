@@ -5,9 +5,14 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use TaylorNetwork\UsernameGenerator\Generator;
+use App\Traits\genid;
 
 class User extends Authenticatable
 {
+    use genid;
+    public $incrementing = false;
+    protected $uuidFieldName = 'id';
     use Notifiable;
 
     /**
@@ -16,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'addr_KONJ', 'password', 'is_admin',
+        'username', 'email', 'password', 'is_admin',
     ];
 
     /**
