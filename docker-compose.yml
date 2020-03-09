@@ -30,7 +30,7 @@ services:
       - "3333:3333"
     working_dir: /rpc-rest
     volumes:
-      - /data/vote/rpc-rest:/rpc-rest
+      - ./rpc-rest:/rpc-rest
     network_mode: host
 
   #Nginx Service
