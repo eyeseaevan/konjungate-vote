@@ -338,6 +338,9 @@ export default {
         this.readData();
     },
     computed: {
+        url: function() {
+            return window.location.hostname;
+        },
         /*
          selectoptions(){
            return this.proposals.map((currentProposal) => ({
@@ -461,12 +464,12 @@ export default {
             const signature = encodeURIComponent(this.vote.signature);
             axios({
                 method: "GET",
-                "url": `http://localhost:3333/api/msg?address=${address}&message=${msg}&signature=${signature}`
+                "url": `http://${url}:3333/api/msg?address=${address}&message=${msg}&signature=${signature}`
             }).then(result => {
                 if (result.data) {
                     axios({
                         method: "GET",
-                        "url": `http://localhost:3333/api/mn?address=${address}`
+                        "url": `http://${url}:3333/api/mn?address=${address}`
                     }).then(result => {
                         if (result.data) {
                             axios.post('/vote', {
