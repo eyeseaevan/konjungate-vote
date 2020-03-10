@@ -7,7 +7,7 @@ const url = require('url');
 const querystring = require('querystring');
 const Rpc = require('bitcoin-rpc-async');
 
-const rpc = new Rpc(`http://${process.env.RPC_USER}:${process.env.RPC_PASS}@${process.env.RPC_ADDRESS}:${process.env.RPC_PORT}`);
+const rpc = new Rpc(`http://'${process.env.RPC_USER}':'${process.env.RPC_PASS}'@${process.env.RPC_ADDRESS}:${process.env.RPC_PORT}`);
 
 let app = express();
 app.use(cors());
