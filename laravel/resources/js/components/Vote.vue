@@ -13,7 +13,7 @@ Vote.vue:
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <div v-for="pageNumber in pageCount(this.proposals, 3)">
-                            <li class="page-item"><a @click="setPage(pageNumber, proposals)" class="page-link" href="#">{{pageNumber}}</a></li>
+                            <li class="page-item"><a @click="setPage(pageNumber, `proposals`)" class="page-link" href="#">{{pageNumber}}</a></li>
                         </div>
                     </ul>
                 </nav>
@@ -57,7 +57,7 @@ Vote.vue:
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <div v-for="pageNumber in pageCount(this.votes, 10)">
-                            <li class="page-item"><a @click="setPage(pageNumber, votes)" class="page-link" href="#">{{pageNumber}}</a></li>
+                            <li class="page-item"><a @click="setPage(pageNumber, `votes`)" class="page-link" href="#">{{pageNumber}}</a></li>
                         </div>
                     </ul>
                 </nav>
@@ -327,7 +327,8 @@ export default {
             },
             errors: [],
             update_vote: {},
-            pageNumber: 0,
+            p_pageNumber: 0,
+            v_pageNumber: 0,
             logged_in: false,
             user_id: '',
             is_admin: false,
@@ -352,7 +353,7 @@ export default {
     },
     methods: {
         paginatedData($array, $count) {
-            const start = this.pageNumber * $count,
+            const start = this.p_pageNumber * $count,
                 end = start + $count;
             return $array.slice(start, end);
         },
@@ -368,23 +369,23 @@ export default {
         },
         setPage(i, set) {
             i--;
-            if(set=='votes')
+            if(set == 'proposals')
             {
-              this.proposals.pageNumber = i;
+              this.p_pageNumber = i;
             }
-            else if (set=='proposals')
+            else if (set == 'votes')
             {
-            this.votes.pageNumber = i;
+            this.v_pageNumber = i;
             }
         },
         prevPage(set) {
-        if(set=='votes')
+        if(set== 1)
         {
-          this.proposals.pageNumber--;
+          this.p_pageNumber--;
         }
-        else if (set=='proposals')
+        else if (set=="votes")
         {
-        this.votes.pageNumber--;
+        this.v_pageNumber--;
         }
         },
         deleteVote(index) {

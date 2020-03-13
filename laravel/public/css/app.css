@@ -5263,7 +5263,7 @@ input[type=button].btn-block {
 }
 
 .page-item:first-child .page-link {
-  margin-left: .3em;
+  margin-left: 0.3em;
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
 }
@@ -13503,3 +13503,4 @@ input[type=color].form-control:disabled {
   font-size: 125%;
   vertical-align: text-bottom;
 }
+
