@@ -465,12 +465,12 @@ export default {
             const signature = encodeURIComponent(this.vote.signature);
             axios({
                 method: "GET",
-                "url": `http://${url}:3333/api/msg?address=${address}&message=${msg}&signature=${signature}`
+                "url": `http://${this.url}:3333/api/msg?address=${address}&message=${msg}&signature=${signature}`
             }).then(result => {
                 if (result.data) {
                     axios({
                         method: "GET",
-                        "url": `http://${url}:3333/api/mn?address=${address}`
+                        "url": `http://${this.url}:3333/api/mn?address=${address}`
                     }).then(result => {
                         if (result.data) {
                             axios.post('/vote', {
