@@ -237,7 +237,7 @@ Vote.vue:
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" @click="debug" class="btn btn-primary">Submit</button>
+                    <button type="button" @click="createVote" class="btn btn-primary">Submit</button>
                 </div>
             </div>
             <!-- /.modal-content -->
