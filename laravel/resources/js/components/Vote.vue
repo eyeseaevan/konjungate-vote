@@ -209,12 +209,12 @@ Vote.vue:
                                 {{ proposal.proposal }}
                             </b-select-option>
                         </b-select>
-                        <div v-if="vote.proposal_id">Selected proposal: {{ this.proposals.filter(el => el.id == proposal.id)[0].proposal }}</div>
+                        <div v-if="vote.proposal_id">Selected proposal: {{ this.proposals.filter(el => el.id == vote.proposal_id)[0].proposal }}</div>
                     </div>
 
                     <div class="form-group">
                         <b-select v-model="vote.option_id" class="mb-3">
-                            <b-select-option v-for="option in options.filter(el => el.proposal_id == vote.proposal_id)" :value="option.id">
+                            <b-select-option v-for="option in this.options.filter(el => el.proposal_id == vote.proposal_id)" :value="option.id">
                                 {{ option.option }}
                             </b-select-option>
                         </b-select>
@@ -237,7 +237,7 @@ Vote.vue:
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" @click="createVote" class="btn btn-primary">Submit</button>
+                    <button type="button" @click="debug" class="btn btn-primary">Submit</button>
                 </div>
             </div>
             <!-- /.modal-content -->

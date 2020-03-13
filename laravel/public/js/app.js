@@ -2246,7 +2246,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       v_pageNumber: 0,
       logged_in: false,
       user_id: '',
-      is_admin: false
+      is_admin: false,
+      debuga: []
     };
   },
   props: {},
@@ -2268,6 +2269,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
   },
   methods: {
+    debug: function debug() {
+      var _this = this;
+
+      this.debuga = this.options.filter(function (el) {
+        return el.proposal_id == _this.vote.proposal_id;
+      });
+    },
     paginatedData: function paginatedData($array, $count) {
       var start = this.p_pageNumber * $count,
           end = start + $count;
@@ -2299,24 +2307,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     deleteVote: function deleteVote(index) {
-      var _this = this;
+      var _this2 = this;
 
       var conf = confirm("Do you really wish to delete your vote?");
 
       if (conf === true) {
         axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]('/vote/' + this.votes[index].id).then(function (response) {
-          _this.votes.splice(index, 1);
+          _this2.votes.splice(index, 1);
         })["catch"](function (error) {});
       }
     },
     deleteProposal: function deleteProposal(index) {
-      var _this2 = this;
+      var _this3 = this;
 
       var conf = confirm("Do you really wish to delete this proposal, all its options, and all its votes?");
 
       if (conf === true) {
         axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"]('/proposal/' + this.proposals[index].id).then(function (response) {
-          _this2.proposals.splice(index, 1);
+          _this3.proposals.splice(index, 1);
         })["catch"](function (error) {});
       }
     },
@@ -2332,119 +2340,119 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       $("#add_vote_model").modal("show");
     },
     createProposal: function createProposal() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/proposal', {
         proposal: this.proposal.proposal,
         expiry: this.proposal.expiry
       }).then(function (response) {
-        _this3.reset();
+        _this4.reset();
 
-        _this3.proposals.push(response.data.proposal);
+        _this4.proposals.push(response.data.proposal);
 
         $("#add_proposal_model").modal("hide");
       })["catch"](function (error) {
-        _this3.errors = [];
+        _this4.errors = [];
 
         if (error.response.data.errors && error.response.data.errors.proposal) {
-          _this3.errors.push(error.response.data.errors.proposal[0]);
+          _this4.errors.push(error.response.data.errors.proposal[0]);
         }
 
         if (error.response.data.errors && error.response.data.errors.expiry) {
-          _this3.errors.push(error.response.data.errors.expiry[0]);
+          _this4.errors.push(error.response.data.errors.expiry[0]);
         }
       });
     },
     createOption: function createOption() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/option', {
         proposal_id: this.option.proposal_id,
         option: this.option.option
       }).then(function (response) {
-        _this4.reset();
+        _this5.reset();
 
-        _this4.options.push(response.data.option);
+        _this5.options.push(response.data.option);
 
         $("#add_option_model").modal("hide");
       })["catch"](function (error) {
-        _this4.errors = [];
+        _this5.errors = [];
 
         if (error.response.data.errors && error.response.data.errors.proposal_id) {
-          _this4.errors.push(error.response.data.errors.proposal[0]);
+          _this5.errors.push(error.response.data.errors.proposal[0]);
         }
 
         if (error.response.data.errors && error.response.data.errors.expiry) {
-          _this4.errors.push(error.response.data.errors.option[0]);
+          _this5.errors.push(error.response.data.errors.option[0]);
         }
       });
     },
     createVote: function createVote() {
-      var _this5 = this;
+      var _this6 = this;
 
       var address = encodeURIComponent(this.vote.address);
       var msg = encodeURIComponent("".concat(this.vote.proposal_id, "/").concat(this.vote.option_id, "/").concat(this.vote.vote, "/").concat(this.vote.address));
       var signature = encodeURIComponent(this.vote.signature);
       axios__WEBPACK_IMPORTED_MODULE_1___default()({
         method: "GET",
-        "url": "http://".concat(url, ":3333/api/msg?address=").concat(address, "&message=").concat(msg, "&signature=").concat(signature)
+        "url": "http://".concat(this.url, ":3333/api/msg?address=").concat(address, "&message=").concat(msg, "&signature=").concat(signature)
       }).then(function (result) {
         if (result.data) {
           axios__WEBPACK_IMPORTED_MODULE_1___default()({
             method: "GET",
-            "url": "http://".concat(url, ":3333/api/mn?address=").concat(address)
+            "url": "http://".concat(_this6.url, ":3333/api/mn?address=").concat(address)
           }).then(function (result) {
             if (result.data) {
               axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/vote', {
-                proposal_id: _this5.vote.proposal_id,
-                option_id: _this5.vote.option_id,
-                vote: _this5.vote.vote,
-                address: _this5.vote.address,
-                signature: _this5.vote.signature
+                proposal_id: _this6.vote.proposal_id,
+                option_id: _this6.vote.option_id,
+                vote: _this6.vote.vote,
+                address: _this6.vote.address,
+                signature: _this6.vote.signature
               }).then(function (response) {
-                _this5.reset();
+                _this6.reset();
 
-                _this5.votes.push(response.data.vote);
+                _this6.votes.push(response.data.vote);
 
                 $("#add_vote_model").modal("hide");
               })["catch"](function (error) {
-                _this5.errors = [];
+                _this6.errors = [];
 
                 if (error.response.data.errors && error.response.data.errors.proposal) {
-                  _this5.errors.push(error.response.data.errors.proposal[0]);
+                  _this6.errors.push(error.response.data.errors.proposal[0]);
                 }
 
                 if (error.response.data.errors && error.response.data.errors.option) {
-                  _this5.errors.push(error.response.data.errors.option[0]);
+                  _this6.errors.push(error.response.data.errors.option[0]);
                 }
 
                 if (error.response.data.errors && error.response.data.errors.vote) {
-                  _this5.errors.push(error.response.data.errors.vote[0]);
+                  _this6.errors.push(error.response.data.errors.vote[0]);
                 }
 
                 if (error.response.data.errors && error.response.data.errors.address) {
-                  _this5.errors.push(error.response.data.errors.address[0]);
+                  _this6.errors.push(error.response.data.errors.address[0]);
                 }
 
                 if (error.response.data.errors && error.response.data.errors.signature) {
-                  _this5.errors.push(error.response.data.errors.signature[0]);
+                  _this6.errors.push(error.response.data.errors.signature[0]);
                 }
 
                 if (error.response.data.errors && error.response.data.errors.is_valid) {
-                  _this5.errors.push(error.response.data.errors.is_valid[0]);
+                  _this6.errors.push(error.response.data.errors.is_valid[0]);
                 }
               });
             } else {
-              _this5.errors.push("Valid signature for vote, but no masternode associated with the address used to sign.");
+              _this6.errors.push("Valid signature for vote, but no masternode associated with the address used to sign.");
             }
           }, function (error) {
-            _this5.errors.push("Cannot connect to Konjungate API.");
+            _this6.errors.push("Cannot connect to Konjungate API.");
           });
         } else {
-          _this5.errors.push("Invalid signature for vote. Please double check your entries.");
+          _this6.errors.push("Invalid signature for vote. Please double check your entries.");
         }
       }, function (error) {
-        _this5.errors.push("Cannot connect to Konjungate API.");
+        _this6.errors.push("Cannot connect to Konjungate API.");
       });
     },
     reset: function reset() {
@@ -2453,21 +2461,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.vote.signature = '';
     },
     readData: function readData() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/proposal').then(function (response) {
-        _this6.proposals = response.data.proposals;
+        _this7.proposals = response.data.proposals;
       });
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/option').then(function (response) {
-        _this6.options = response.data.options;
+        _this7.options = response.data.options;
       });
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/vote').then(function (response) {
-        _this6.votes = response.data.votes;
+        _this7.votes = response.data.votes;
       });
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/auth').then(function (response) {
-        _this6.logged_in = response.data.logged_in;
-        _this6.user_id = response.data.user_id;
-        _this6.is_admin = response.data.is_admin;
+        _this7.logged_in = response.data.logged_in;
+        _this7.user_id = response.data.user_id;
+        _this7.is_admin = response.data.is_admin;
       });
     },
     initUpdate: function initUpdate(index) {
@@ -2476,7 +2484,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.update_vote = this.votes[index];
     },
     updateVote: function updateVote() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.patch('/vote/' + this.update_vote.id, {
         vote: this.update_vote.vote,
@@ -2485,22 +2493,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }).then(function (response) {
         $("#update_vote_model").modal("hide");
       })["catch"](function (error) {
-        _this7.errors = [];
+        _this8.errors = [];
 
         if (error.response.data.errors.name) {
-          _this7.errors.push(error.response.data.errors.vote[0]);
+          _this8.errors.push(error.response.data.errors.vote[0]);
         }
 
         if (error.response.data.errors.address) {
-          _this7.errors.push(error.response.data.errors.address[0]);
+          _this8.errors.push(error.response.data.errors.address[0]);
         }
 
         if (error.response.data.errors.signature) {
-          _this7.errors.push(error.response.data.errors.signature[0]);
+          _this8.errors.push(error.response.data.errors.signature[0]);
         }
 
         if (error.response.data.errors.is_valid) {
-          _this7.errors.push(error.response.data.errors.is_valid[0]);
+          _this8.errors.push(error.response.data.errors.is_valid[0]);
         }
       });
     }
@@ -80909,7 +80917,7 @@ var render = function() {
                               "Selected proposal: " +
                                 _vm._s(
                                   this.proposals.filter(function(el) {
-                                    return el.id == _vm.proposal.id
+                                    return el.id == _vm.vote.proposal_id
                                   })[0].proposal
                                 )
                             )
@@ -80936,7 +80944,7 @@ var render = function() {
                           }
                         },
                         _vm._l(
-                          _vm.options.filter(function(el) {
+                          this.options.filter(function(el) {
                             return el.proposal_id == _vm.vote.proposal_id
                           }),
                           function(option) {
@@ -81105,7 +81113,7 @@ var render = function() {
                     {
                       staticClass: "btn btn-primary",
                       attrs: { type: "button" },
-                      on: { click: _vm.createVote }
+                      on: { click: _vm.debug }
                     },
                     [_vm._v("Submit")]
                   )
@@ -93765,8 +93773,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /data/vote/laravel/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /data/vote/laravel/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
